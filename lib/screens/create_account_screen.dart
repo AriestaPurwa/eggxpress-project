@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../widgets/custom_input_field.dart';
+import 'home_screen.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -91,7 +92,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   const SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: () {
-                      // Handle form submission
+                      Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => const HomeScreen()),
+  );// Handle form submission
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0066FF),
