@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/inventory_card.dart';
+import 'edit_gudang_screen.dart'; // Import screen tujuan
 
 class GudangScreen extends StatelessWidget {
   const GudangScreen({Key? key}) : super(key: key);
@@ -62,7 +63,12 @@ class GudangScreen extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // Tambah data action
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EditGudangScreen(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF004CFF),
@@ -133,21 +139,24 @@ class GudangScreen extends StatelessWidget {
           InventoryCard(
             title: title,
             description: description,
-            imageUrl: 'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/c0f0d836a2bd2ef39df5c0bc24bfc50d4ce5f6f7?placeholderIfAbsent=true',
-            
+            imageUrl:
+                'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/c0f0d836a2bd2ef39df5c0bc24bfc50d4ce5f6f7?placeholderIfAbsent=true',
           ),
-          
-            Positioned(
-          top: 10,
-          right: 10,
-          child: IconButton(
-            icon: const Icon(Icons.edit, color: Colors.black),
-            onPressed: () {
-              // Aksi edit
-            },
+          Positioned(
+            top: 10,
+            right: 10,
+            child: IconButton(
+              icon: const Icon(Icons.edit, color: Colors.black),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditGudangScreen(),
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-
         ],
       ),
     );
