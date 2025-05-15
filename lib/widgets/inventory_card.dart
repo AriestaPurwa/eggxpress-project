@@ -4,81 +4,70 @@ class InventoryCard extends StatelessWidget {
   final String title;
   final String description;
   final String imageUrl;
-  final String arrowUrl;
+  
+  final VoidCallback? onEdit; // Tambahan
 
   const InventoryCard({
     Key? key,
     required this.title,
     required this.description,
     required this.imageUrl,
-    required this.arrowUrl,
+    
+    this.onEdit, // Tambahan
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      width: double.infinity,
+      padding: const EdgeInsets.all(16), // ruang untuk isi
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFFC0C0C0),
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: const [
-          BoxShadow(
-            color: Color.fromRGBO(19, 44, 74, 0.04),
-            offset: Offset(0, 10),
-            blurRadius: 18,
-          ),
-        ],
+        color: const Color(0xFFD9E4FF),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.network(
             imageUrl,
-            width: 110,
-            height: 88,
-            fit: BoxFit.contain,
+            width: 64,
+            height: 64,
+            fit: BoxFit.cover,
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: Row(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF2C2C2C),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      description,
-                      style: const TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF8C8C8C),
-                      ),
-                    ),
-                  ],
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontFamily: 'Raleway',
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 67),
-                  child: Image.network(
-                    arrowUrl,
-                    width: 21,
-                    height: 21,
-                    fit: BoxFit.contain,
+                const SizedBox(height: 6),
+                Text(
+                  description,
+                  style: const TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: 14,
+                    color: Colors.black87,
                   ),
                 ),
               ],
             ),
           ),
+          const SizedBox(width: 8),
+          
+            
+            
+            
+            
+          
         ],
       ),
     );

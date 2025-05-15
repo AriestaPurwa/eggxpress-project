@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../widgets/inventory_card.dart';
-import '../widgets/bottom_nav_bar.dart';
 
 class GudangScreen extends StatelessWidget {
   const GudangScreen({Key? key}) : super(key: key);
@@ -25,7 +24,7 @@ class GudangScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'halo, pedagang',
                       style: TextStyle(
                         fontFamily: 'Raleway',
@@ -51,32 +50,34 @@ class GudangScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Gudang',
                     style: TextStyle(
                       fontFamily: 'Raleway',
                       fontSize: 32,
                       fontWeight: FontWeight.w700,
                       letterSpacing: -0.52,
-                      color: const Color(0xFF202020),
+                      color: Color(0xFF202020),
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 21,
-                      vertical: 7,
+                  ElevatedButton(
+                    onPressed: () {
+                      // Tambah data action
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF004CFF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF004CFF),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Text(
+                    child: const Text(
                       'Tambah Data',
                       style: TextStyle(
                         fontFamily: 'Nunito Sans',
-                        fontSize: 22,
-                        fontWeight: FontWeight.w300,
-                        color: const Color(0xFFF3F3F3),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -85,50 +86,69 @@ class GudangScreen extends StatelessWidget {
 
               const SizedBox(height: 12),
 
-              // Inventory Cards
+              // Inventory Cards with Edit buttons
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      InventoryCard(
+                      buildInventoryCard(
+                        context,
                         title: 'STOCK TELUR',
                         description: '9 APRIL 2025 : 200 BUTIR',
-                        imageUrl: 'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/c0f0d836a2bd2ef39df5c0bc24bfc50d4ce5f6f7?placeholderIfAbsent=true',
-                        arrowUrl: 'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/6d4c550759df2ef796953a2af20dfcd4fb6d6161?placeholderIfAbsent=true',
                       ),
-                      const SizedBox(height: 23),
-                      InventoryCard(
+                      buildInventoryCard(
+                        context,
                         title: 'STOCK BEBEK',
                         description: '9 APRIL 2025 : 200 EKOR',
-                        imageUrl: 'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/c0f0d836a2bd2ef39df5c0bc24bfc50d4ce5f6f7?placeholderIfAbsent=true',
-                        arrowUrl: 'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/6d4c550759df2ef796953a2af20dfcd4fb6d6161?placeholderIfAbsent=true',
                       ),
-                      const SizedBox(height: 23),
-                      InventoryCard(
+                      buildInventoryCard(
+                        context,
                         title: 'STOCK PAKAN',
                         description: '9 APRIL 2025 : 200 BUAH',
-                        imageUrl: 'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/c0f0d836a2bd2ef39df5c0bc24bfc50d4ce5f6f7?placeholderIfAbsent=true',
-                        arrowUrl: 'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/6d4c550759df2ef796953a2af20dfcd4fb6d6161?placeholderIfAbsent=true',
                       ),
-                      const SizedBox(height: 24),
-                      InventoryCard(
+                      buildInventoryCard(
+                        context,
                         title: 'STOCK ALAT',
                         description: '9 APRIL 2025 : 200 UNIT',
-                        imageUrl: 'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/c0f0d836a2bd2ef39df5c0bc24bfc50d4ce5f6f7?placeholderIfAbsent=true',
-                        arrowUrl: 'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/6d4c550759df2ef796953a2af20dfcd4fb6d6161?placeholderIfAbsent=true',
                       ),
                     ],
                   ),
                 ),
               ),
-
-              const SizedBox(height: 29),
-
-              // Bottom Navigation
-              const BottomNavBar(),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildInventoryCard(BuildContext context, {
+    required String title,
+    required String description,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Stack(
+        children: [
+          InventoryCard(
+            title: title,
+            description: description,
+            imageUrl: 'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/c0f0d836a2bd2ef39df5c0bc24bfc50d4ce5f6f7?placeholderIfAbsent=true',
+            
+          ),
+          
+            Positioned(
+          top: 10,
+          right: 10,
+          child: IconButton(
+            icon: const Icon(Icons.edit, color: Colors.black),
+            onPressed: () {
+              // Aksi edit
+            },
+          ),
+        ),
+
+        ],
       ),
     );
   }
