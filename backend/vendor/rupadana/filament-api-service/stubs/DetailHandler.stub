@@ -1,0 +1,39 @@
+<?php
+
+namespace {{ handlersNamespace }};
+
+use App\Filament\Resources\SettingResource;
+use {{ resource }};
+use Rupadana\ApiService\Http\Handlers;
+use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Http\Request;
+use {{ transformerClass }};
+
+class DetailHandler extends Handlers
+{
+    public static string | null $uri = '/{id}';
+    public static string | null $resource = {{ resourceClass }}::class;
+
+
+    /**
+     * Show {{ model }}
+     *
+     * @param Request $request
+     * @return {{ transformer }}
+     */
+    public function handler(Request $request)
+    {
+        $id = $request->route('id');
+        
+        $query = static::getEloquentQuery();
+
+        $query = QueryBuilder::for(
+            $query->where(static::getKeyName(), $id)
+        )
+            ->first();
+
+        if (!$query) return static::sendNotFoundResponse();
+
+        return new {{ transformer }}($query);
+    }
+}

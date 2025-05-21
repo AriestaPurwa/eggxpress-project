@@ -1,0 +1,5 @@
+{
+    "require": {
+        "rupadana/filament-api-service": "^3.4"
+    }
+}
