@@ -24,19 +24,19 @@ class CustomDropdown extends StatelessWidget {
         Text(
           label.toUpperCase(),
           style: AppTextStyles.label,
-          semanticsLabel: label,
         ),
-        const SizedBox(height: 9),
+        const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(32),
             color: AppColors.lightBlue,
+            borderRadius: BorderRadius.circular(24),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: value,
               isExpanded: true,
+              borderRadius: BorderRadius.circular(16),
               items: items.map((String item) {
                 return DropdownMenuItem<String>(
                   value: item,

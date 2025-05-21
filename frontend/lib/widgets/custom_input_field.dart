@@ -20,27 +20,29 @@ class CustomInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      keyboardType: keyboardType,
-      obscureText: isPassword && !showPasswordToggle,
-      decoration: InputDecoration(
-        hintText: placeholder,
-        filled: true,
-        fillColor: const Color(0xFFEDEDED),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFFE1E9FF), // sama seperti dropdown
+        borderRadius: BorderRadius.circular(24),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: TextField(
+        controller: controller,
+        keyboardType: keyboardType,
+        obscureText: isPassword && !showPasswordToggle,
+        decoration: InputDecoration(
+          hintText: placeholder,
+          border: InputBorder.none,
+          suffixIcon: isPassword
+              ? IconButton(
+                  icon: Icon(
+                    showPasswordToggle ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.grey,
+                  ),
+                  onPressed: onTogglePassword,
+                )
+              : null,
         ),
-        suffixIcon: isPassword
-            ? IconButton(
-                icon: Icon(
-                  showPasswordToggle ? Icons.visibility : Icons.visibility_off,
-                  color: Colors.grey,
-                ),
-                onPressed: onTogglePassword,
-              )
-            : null,
       ),
     );
   }

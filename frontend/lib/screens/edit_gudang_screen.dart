@@ -5,7 +5,7 @@ import '../widgets/custom_dropdown.dart';
 import '../widgets/custom_input_field.dart';
 
 class EditGudangScreen extends StatefulWidget {
-  const EditGudangScreen({Key? key}) : super(key: key);
+  const EditGudangScreen({super.key});
 
   @override
   State<EditGudangScreen> createState() => _EditGudangScreenState();
@@ -26,78 +26,104 @@ class _EditGudangScreenState extends State<EditGudangScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: 480),
-            padding: const EdgeInsets.fromLTRB(18, 31, 18, 220),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.network(
-                      'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/dfa3a6d5de3a580cdd7eee6bd24bf07178251407?placeholderIfAbsent=true',
-                      width: 107,
-                      fit: BoxFit.contain,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 52,
-                        vertical: 29,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 480),
+              padding: const EdgeInsets.fromLTRB(18, 24, 18, 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Back Button
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.arrow_back, color: Colors.black),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: AppColors.lightBlue,
+
+                      // Title
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 20,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: AppColors.lightBlue,
+                        ),
+                        child: const Text(
+                          'Gudang',
+                          style: AppTextStyles.heading,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 80),
+
+                  // Dropdown
+                  CustomDropdown(
+                    label: 'Pilih stok',
+                    value: _selectedStock,
+                    items: _stockOptions,
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          _selectedStock = newValue;
+                        });
+                      }
+                    },
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Input field
+                  CustomInputField(
+                    placeholder: 'Masukkan jumlah stok',
+                    controller: _stockController,
+                    keyboardType: TextInputType.number,
+                  ),
+
+                  const SizedBox(height: 48),
+
+                  // Save Button
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Simpan data di sini
+                        print('Stok: $_selectedStock, Jumlah: ${_stockController.text}');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 48,
+                          vertical: 12,
+                        ),
+                        minimumSize: const Size(172, 0),
                       ),
                       child: const Text(
-                        'Gudang',
-                        style: AppTextStyles.heading,
+                        'Simpan',
+                        style: AppTextStyles.button,
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 167),
-                CustomDropdown(
-                  label: 'pilih stok',
-                  value: _selectedStock,
-                  items: _stockOptions,
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      setState(() {
-                        _selectedStock = newValue;
-                      });
-                    }
-                  },
-                ),
-                const SizedBox(height: 27),
-                CustomInputField(
-                  placeholder: 'masukkan jumlah stok', // ✅ pakai nama yang sesuai
-                  controller: _stockController,
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 70),
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle save action
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 49,
-                      vertical: 7,
-                    ),
-                    minimumSize: const Size(172, 0),
                   ),
-                  child: const Text(
-                    'Simpan',
-                    style: AppTextStyles.button,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
