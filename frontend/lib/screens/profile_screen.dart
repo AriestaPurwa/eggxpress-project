@@ -73,10 +73,47 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-
-                      const SizedBox(height: 40),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 46),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFD9D9D9),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 17,
+                        vertical: 4,
+                      ),
+                      width: 221,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Image.network(
+                            'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/c8e668115457dd737479cad8dd10b9e2a578578f?placeholderIfAbsent=true',
+                            width: 32,
+                            height: 32,
+                            fit: BoxFit.contain,
+                          ),
+                          Image.network(
+                            'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/095b1c758230da75f4b5b00164300d10feb5886b?placeholderIfAbsent=true',
+                            width: 32,
+                            height: 32,
+                            fit: BoxFit.contain,
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(25),
+                            child: Image.network(
+                              'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/0ee84e7fcd9794edb8ef050d2f1e66c3ee5794ff?placeholderIfAbsent=true',
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 27),
+                  ],
                 ),
               ),
             ],
