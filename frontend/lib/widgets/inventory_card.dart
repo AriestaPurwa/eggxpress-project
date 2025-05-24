@@ -8,13 +8,13 @@ class InventoryCard extends StatelessWidget {
   final VoidCallback? onEdit; // Tambahan
 
   const InventoryCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     required this.imageUrl,
     
     this.onEdit, // Tambahan
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

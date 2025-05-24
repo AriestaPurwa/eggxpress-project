@@ -5,7 +5,7 @@ import '../widgets/custom_dropdown.dart';
 import '../widgets/custom_input_field.dart';
 
 class EditGudangScreen extends StatefulWidget {
-  const EditGudangScreen({Key? key}) : super(key: key);
+  const EditGudangScreen({super.key});
 
   @override
   State<EditGudangScreen> createState() => _EditGudangScreenState();

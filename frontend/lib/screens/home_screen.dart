@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'gudang_screen.dart';
 import 'profile_screen.dart';
+import 'penjualan/penjualan_screen.dart'; // <-- Sudah ditambahkan
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -144,8 +145,24 @@ class HomeContent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _MenuButton(
-                    icon: LucideIcons.badgeDollarSign, label: "Penjualan"),
-                _MenuButton(icon: LucideIcons.info, label: "Info"),
+                  icon: LucideIcons.badgeDollarSign,
+                  label: "Penjualan",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PenjualanScreen(),
+                      ),
+                    );
+                  },
+                ),
+                _MenuButton(
+                  icon: LucideIcons.info,
+                  label: "Info",
+                  onTap: () {
+                    // Tambahkan navigasi ke InfoScreen jika ada
+                  },
+                ),
               ],
             )
           ],
@@ -158,32 +175,40 @@ class HomeContent extends StatelessWidget {
 class _MenuButton extends StatelessWidget {
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;
 
-  const _MenuButton({required this.icon, required this.label});
+  const _MenuButton({
+    required this.icon,
+    required this.label,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 120,
-      height: 100,
-      decoration: BoxDecoration(
-        color: const Color(0xFFEDEBFF),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 6,
-            offset: const Offset(3, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 28, color: Colors.black),
-          const SizedBox(height: 8),
-          Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 120,
+        height: 100,
+        decoration: BoxDecoration(
+          color: const Color(0xFFEDEBFF),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 6,
+              offset: const Offset(3, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 28, color: Colors.black),
+            const SizedBox(height: 8),
+            Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
+          ],
+        ),
       ),
     );
   }

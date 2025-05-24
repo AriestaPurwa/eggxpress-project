@@ -3,7 +3,7 @@ import '../widgets/inventory_card.dart';
 import 'edit_gudang_screen.dart'; // Import screen tujuan
 
 class GudangScreen extends StatelessWidget {
-  const GudangScreen({Key? key}) : super(key: key);
+  const GudangScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,62 +1,87 @@
 import 'package:flutter/material.dart';
 
 class ProfileHeader extends StatelessWidget {
-  const ProfileHeader({Key? key}) : super(key: key);
+  const ProfileHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.202,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.network(
-              'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/6f64e87a6d190982db1bab33cfc79b9c85a5dde7?placeholderIfAbsent=true',
-              fit: BoxFit.cover,
+    return Stack(
+      children: [
+        // Background dengan gelombang
+        ClipPath(
+          clipper: BottomWaveClipper(),
+          child: Container(
+            height: 260,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF005BEA), Color(0xFF00C6FB)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 62,
-              vertical: 73,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.network(
+        ),
+
+        // Konten profile (avatar, nama, email)
+        Positioned.fill(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 60),
+              const CircleAvatar(
+                radius: 45,
+                backgroundImage: NetworkImage(
                   'https://cdn.builder.io/api/v1/image/assets/0098ec3a31a5408fa0df384f15fcd112/1db0a52187d2ccf61a87c3705481b0e9933652cf?placeholderIfAbsent=true',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.contain,
                 ),
-                const SizedBox(height: 13),
-                const Text(
-                  'PEDAGANG',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Poppins',
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    height: 1,
-                  ),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'PEDAGANG',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins',
                 ),
-                const SizedBox(height: 12),
-                const Text(
-                  'pedagang@gmail.com | 082234567890',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Roboto',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    height: 1,
-                    letterSpacing: 0.25,
-                  ),
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                'pedagang@gmail.com | 082234567890',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontFamily: 'Roboto',
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
+}
+
+// Custom ClipPath untuk gelombang bawah
+class BottomWaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.lineTo(0, size.height - 40); // mulai dari bawah kiri
+    final firstControlPoint = Offset(size.width / 2, size.height);
+    final firstEndPoint = Offset(size.width, size.height - 40);
+    path.quadraticBezierTo(
+      firstControlPoint.dx,
+      firstControlPoint.dy,
+      firstEndPoint.dx,
+      firstEndPoint.dy,
+    );
+    path.lineTo(size.width, 0); // kanan atas
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
