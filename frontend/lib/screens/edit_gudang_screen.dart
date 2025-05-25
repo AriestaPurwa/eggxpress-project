@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/app_colors.dart';
 import '../theme/text_styles.dart';
 import '../widgets/custom_dropdown.dart';
@@ -14,7 +15,12 @@ class EditGudangScreen extends StatefulWidget {
 class _EditGudangScreenState extends State<EditGudangScreen> {
   final TextEditingController _stockController = TextEditingController();
   String _selectedStock = '-- Select --';
-  final List<String> _stockOptions = ['-- Select --', 'Option 1', 'Option 2'];
+  final List<String> _stockOptions = ['-- Select --', 'telur', 'bebek', 'pakan', 'alat'];
+
+  Future<void> saveStock(String jenis, int jumlah) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('stok_$jenis', jumlah);
+  }
 
   @override
   void dispose() {
@@ -35,11 +41,9 @@ class _EditGudangScreenState extends State<EditGudangScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Back Button
                       Container(
                         decoration: BoxDecoration(
                           color: AppColors.primary,
@@ -52,28 +56,17 @@ class _EditGudangScreenState extends State<EditGudangScreen> {
                           },
                         ),
                       ),
-
-                      // Title
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 32,
-                          vertical: 20,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
                           color: AppColors.lightBlue,
                         ),
-                        child: const Text(
-                          'Gudang',
-                          style: AppTextStyles.heading,
-                        ),
+                        child: const Text('Gudang', style: AppTextStyles.heading),
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 80),
-
-                  // Dropdown
                   CustomDropdown(
                     label: 'Pilih stok',
                     value: _selectedStock,
@@ -86,40 +79,31 @@ class _EditGudangScreenState extends State<EditGudangScreen> {
                       }
                     },
                   ),
-
                   const SizedBox(height: 24),
-
-                  // Input field
                   CustomInputField(
                     placeholder: 'Masukkan jumlah stok',
                     controller: _stockController,
                     keyboardType: TextInputType.number,
                   ),
-
                   const SizedBox(height: 48),
-
-                  // Save Button
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Simpan data di sini
-                        print('Stok: $_selectedStock, Jumlah: ${_stockController.text}');
+                      onPressed: () async {
+                        if (_selectedStock != '-- Select --' && _stockController.text.isNotEmpty) {
+                          int jumlah = int.tryParse(_stockController.text) ?? 0;
+                          await saveStock(_selectedStock, jumlah);
+                          Navigator.pop(context);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 48,
-                          vertical: 12,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 12),
                         minimumSize: const Size(172, 0),
                       ),
-                      child: const Text(
-                        'Simpan',
-                        style: AppTextStyles.button,
-                      ),
+                      child: const Text('Simpan', style: AppTextStyles.button),
                     ),
                   ),
                 ],
