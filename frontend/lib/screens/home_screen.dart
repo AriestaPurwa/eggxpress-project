@@ -1,8 +1,14 @@
+import 'dart:convert';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'gudang_screen.dart';
 import 'profile_screen.dart';
-import 'penjualan/penjualan_screen.dart'; // <-- Sudah ditambahkan
+import 'penjualan/penjualan_screen.dart';
+import 'info_screen.dart'; // Tambahan penting
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,9 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 1;
 
   final List<Widget> _screens = [
-    const GudangScreen(),   // Index 0
-    const HomeContent(),    // Index 1 (Home)
-    const ProfileScreen(),  // Index 2
+    const GudangScreen(),
+    const HomeContent(),
+    const ProfileScreen(),
   ];
 
   @override
@@ -46,11 +52,62 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class HomeContent extends StatelessWidget {
+class HomeContent extends StatefulWidget {
   const HomeContent({super.key});
 
   @override
+  State<HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<HomeContent> {
+  Map<String, double> monthlyTotals = {};
+
+  @override
+  void initState() {
+    super.initState();
+    loadAllSalesData();
+  }
+
+  Future<void> loadAllSalesData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final kategori = [
+      'penjualan_telur',
+      'penjualan_bebek',
+      'penjualan_pakan',
+      'penjualan_alat'
+    ];
+
+    Map<String, double> monthlySums = {};
+
+    for (String key in kategori) {
+      final data = prefs.getStringList(key) ?? [];
+      for (String entry in data) {
+        final decoded = jsonDecode(entry);
+        final date = DateTime.tryParse(decoded['tanggal'] ?? '');
+        final total = double.tryParse(decoded['total'].toString()) ?? 0;
+        if (date != null) {
+          final monthKey = DateFormat('yyyy-MM').format(date);
+          monthlySums[monthKey] = (monthlySums[monthKey] ?? 0) + total;
+        }
+      }
+    }
+
+    setState(() {
+      monthlyTotals = monthlySums;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final sortedMonths = monthlyTotals.keys.toList()..sort();
+    final spots = <FlSpot>[];
+
+    for (int i = 0; i < sortedMonths.length; i++) {
+      final key = sortedMonths[i];
+      final total = monthlyTotals[key] ?? 0;
+      spots.add(FlSpot(i.toDouble(), total));
+    }
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -64,12 +121,12 @@ class HomeContent extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
-                      Text("halo, pedagang",
+                      Text("Halo, Pedagang 👋",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18)),
+                              fontWeight: FontWeight.bold, fontSize: 20)),
                       SizedBox(height: 4),
-                      Text("penjualan minggu ini",
-                          style: TextStyle(fontSize: 14)),
+                      Text("Rekap Penjualan Bulanan",
+                          style: TextStyle(fontSize: 14, color: Colors.grey)),
                     ],
                   ),
                 ),
@@ -82,7 +139,7 @@ class HomeContent extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // Chart Card
+            // Grafik Penjualan
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -90,48 +147,77 @@ class HomeContent extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withOpacity(0.08),
                     blurRadius: 6,
-                    offset: const Offset(3, 3),
+                    offset: const Offset(2, 4),
                   ),
                 ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Expenses",
-                      style: TextStyle(color: Colors.grey, fontSize: 14)),
-                  const Text("\$4200.30",
-                      style: TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 10),
+                  const Text("Grafik Penjualan",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 12),
                   SizedBox(
-                    height: 60,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: List.generate(10, (index) {
-                        final height = (index % 5 + 3) * 8.0;
-                        return Expanded(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 2),
-                            child: Container(
-                              height: height,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                gradient: const LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                  colors: [
-                                    Color(0xFF9B8BFF),
-                                    Color(0xFFEDEBFF),
-                                  ],
-                                ),
-                              ),
+                    height: 200,
+                    child: LineChart(
+                      LineChartData(
+                        gridData: FlGridData(show: true),
+                        titlesData: FlTitlesData(
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              interval: 1,
+                              getTitlesWidget: (value, meta) {
+                                if (value.toInt() >= sortedMonths.length) {
+                                  return const Text('');
+                                }
+                                final monthLabel =
+                                    sortedMonths[value.toInt()];
+                                final date = DateTime.tryParse(
+                                    "$monthLabel-01");
+                                return Text(
+                                  DateFormat('MM/yy').format(date!),
+                                  style: const TextStyle(fontSize: 10),
+                                );
+                              },
                             ),
                           ),
-                        );
-                      }),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              interval: 10000,
+                              reservedSize: 40,
+                              getTitlesWidget: (value, meta) {
+                                return Text(
+                                  '${value.toInt()}',
+                                  style: const TextStyle(fontSize: 10),
+                                );
+                              },
+                            ),
+                          ),
+                          topTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false)),
+                          rightTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false)),
+                        ),
+                        borderData: FlBorderData(show: true),
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: spots,
+                            isCurved: true,
+                            barWidth: 3,
+                            color: Colors.indigo,
+                            belowBarData: BarAreaData(
+                              show: true,
+                              color: Colors.indigo.withOpacity(0.2),
+                            ),
+                            dotData: FlDotData(show: true),
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 ],
@@ -151,8 +237,7 @@ class HomeContent extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PenjualanScreen(),
-                      ),
+                          builder: (context) => const PenjualanScreen()),
                     );
                   },
                 ),
@@ -160,7 +245,11 @@ class HomeContent extends StatelessWidget {
                   icon: LucideIcons.info,
                   label: "Info",
                   onTap: () {
-                    // Tambahkan navigasi ke InfoScreen jika ada
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const InfoScreen()),
+                    );
                   },
                 ),
               ],
