@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:eggxpress/widgets/profile_header.dart' as header;
 import 'package:eggxpress/widgets/profile_action_button.dart' as action;
+import 'edit_profile_screen.dart';
+import 'security_screen.dart';
+import 'welcome_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -22,14 +25,20 @@ class ProfileScreen extends StatelessWidget {
                     action.ProfileActionButton(
                       text: 'Edit profile information',
                       onTap: () {
-                        // Handle edit profile
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const EditProfileScreen()),
+                        );
                       },
                     ),
                     const SizedBox(height: 30),
                     action.ProfileActionButton(
                       text: 'Security',
                       onTap: () {
-                        // Handle security
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SecurityScreen()),
+                        );
                       },
                     ),
                     const SizedBox(height: 29),
@@ -50,7 +59,10 @@ class ProfileScreen extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Handle logout
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFD9E4FF),
@@ -74,7 +86,6 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    
                     const SizedBox(height: 27),
                   ],
                 ),
