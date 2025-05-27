@@ -19,7 +19,7 @@ class pengguna extends Model
 
     public function data_bebek()
     {
-        return $this->hasMany(data_bebek::class);
+        return $this->hasMany(databebek::class);
     }
 
     public function alat_ternak()
