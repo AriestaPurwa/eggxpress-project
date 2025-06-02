@@ -232,7 +232,7 @@ class StokTelurController extends Controller
                     'success' => false,
                     'message' => 'Kualitas tidak valid'
                 ], 400);
-            }
+            }   
             
             $stokTelur = stoktelur::with('pengguna')
                 ->where('kualitas', $kualitasInt)
